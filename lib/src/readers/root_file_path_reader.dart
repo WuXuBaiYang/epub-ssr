@@ -1,36 +1,35 @@
-import 'dart:async';
-
+import 'dart:convert' as convert;
 import 'package:archive/archive.dart';
-import 'package:dart2_constant/convert.dart' as convert;
-import 'package:xml/xml.dart' as xml;
+import 'package:epub_ssr/src/utils/list_where.dart';
+import 'package:xml/xml.dart';
 
 class RootFilePathReader {
-  static Future<String> getRootFilePath(Archive epubArchive) async {
-    const String EPUB_CONTAINER_FILE_PATH = "META-INF/container.xml";
+  static const EPUB_CONTAINER_FILE_PATH = 'META-INF/container.xml';
 
-    ArchiveFile containerFileEntry = epubArchive.files.firstWhere(
-        (ArchiveFile file) => file.name == EPUB_CONTAINER_FILE_PATH,
-        orElse: () => null);
+  static String? getRootFilePath(Archive epubArchive) {
+    final containerFileEntry = epubArchive.files.firstWhereOrNull(
+      (e) => e.name == EPUB_CONTAINER_FILE_PATH,
+    );
     if (containerFileEntry == null) {
       throw Exception(
-          "EPUB parsing error: ${EPUB_CONTAINER_FILE_PATH} file not found in archive.");
+        'EPUB parsing error: $EPUB_CONTAINER_FILE_PATH file not found in archive.',
+      );
     }
-
-    xml.XmlDocument containerDocument =
-        xml.parse(convert.utf8.decode(containerFileEntry.content));
-    xml.XmlElement packageElement = containerDocument
-        .findAllElements("container",
-            namespace: "urn:oasis:names:tc:opendocument:xmlns:container")
-        .firstWhere((xml.XmlElement elem) => elem != null, orElse: () => null);
+    final containerDocument = XmlDocument.parse(
+      convert.utf8.decode(containerFileEntry.content),
+    );
+    final packageElement = containerDocument
+        .findAllElements(
+          'container',
+          namespace: 'urn:oasis:names:tc:opendocument:xmlns:container',
+        )
+        .firstOrNull;
     if (packageElement == null) {
-      throw Exception("EPUB parsing error: Invalid epub container");
+      throw Exception('EPUB parsing error: Invalid epub container');
     }
-
-    xml.XmlElement rootFileElement = packageElement.descendants.firstWhere(
-        (xml.XmlNode testElem) =>
-            (testElem is xml.XmlElement) && "rootfile" == testElem.name.local,
-        orElse: () => null);
-
-    return rootFileElement.getAttribute("full-path");
+    final rootFileElement = packageElement.descendants.firstWhereOrNull(
+      (e) => (e is XmlElement) && 'rootfile' == e.name.local,
+    );
+    return rootFileElement?.getAttribute('full-path');
   }
 }

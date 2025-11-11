@@ -1,0 +1,3 @@
+class EpubNavigationLabel {
+  String text = '';
+}

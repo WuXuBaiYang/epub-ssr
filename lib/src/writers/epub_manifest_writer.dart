@@ -1,18 +1,21 @@
-import 'package:epub/src/schema/opf/epub_manifest.dart';
-import 'package:xml/src/xml/builder.dart' show XmlBuilder;
+import 'package:epub_ssr/src/schema/opf/manifest.dart';
+import 'package:xml/xml.dart';
 
 class EpubManifestWriter {
   static void writeManifest(XmlBuilder builder, EpubManifest manifest) {
-    builder
-      ..element("manifest", nest: () {
-        manifest.Items.forEach((item) {
-          builder.element("item", nest: () {
-            builder
-              ..attribute("id", item.Id)
-              ..attribute("href", item.Href)
-              ..attribute("media-type", item.MediaType);
-          });
-        });
-      });
+    return builder.element(
+      'manifest',
+      nest: () {
+        manifest.items.forEach(
+          (e) => builder.element(
+            'item',
+            nest: () => builder
+              ..attribute('id', e.id)
+              ..attribute('href', e.href)
+              ..attribute('media-type', e.mediaType),
+          ),
+        );
+      },
+    );
   }
 }
