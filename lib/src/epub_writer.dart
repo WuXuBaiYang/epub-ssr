@@ -1,4 +1,4 @@
-import 'dart:convert' as convert;
+import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:epub_ssr/epub.dart';
@@ -18,7 +18,7 @@ class EpubWriter {
       ArchiveFile.noCompress(
         'metadata',
         20,
-        convert.utf8.encode('application/epub+zip'),
+        utf8.encode('application/epub+zip'),
       ),
     );
 
@@ -27,7 +27,7 @@ class EpubWriter {
       ArchiveFile(
         'META-INF/container.xml',
         _container_file.length,
-        convert.utf8.encode(_container_file),
+        utf8.encode(_container_file),
       ),
     );
 
@@ -37,7 +37,7 @@ class EpubWriter {
       if (file is EpubByteContentFile) {
         content = file.content;
       } else if (file is EpubTextContentFile) {
-        content = convert.utf8.encode(file.content);
+        content = utf8.encode(file.content);
       }
       arch.addFile(
         ArchiveFile(
@@ -53,7 +53,7 @@ class EpubWriter {
       ArchiveFile(
         ZipPathUtils.combine(book.schema.contentDirectoryPath, 'content.opf'),
         contentOpf.length,
-        convert.utf8.encode(contentOpf),
+        utf8.encode(contentOpf),
       ),
     );
     return arch;

@@ -1,4 +1,5 @@
-import 'package:image/image.dart';
+import 'dart:typed_data';
+
 import 'chapter.dart';
 import 'content.dart';
 import 'schema.dart';
@@ -9,6 +10,6 @@ class EpubBook {
   List<String> authorList = [];
   EpubSchema schema = EpubSchema();
   EpubContent content = EpubContent();
-  Image? coverImage;
+  Uint8List? coverImage;
   List<EpubChapter> chapters = [];
 }

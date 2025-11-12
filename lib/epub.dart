@@ -14,4 +14,3 @@ export 'src/entities/content_file.dart';
 export 'src/entities/text_content_file.dart';
 export 'src/schema/opf/package.dart';
 export 'src/schema/navigation/navigation.dart';
-export 'package:image/image.dart' show Image;

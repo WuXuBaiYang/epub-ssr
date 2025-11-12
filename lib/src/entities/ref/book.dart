@@ -1,8 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:archive/archive.dart';
 import 'package:epub_ssr/src/entities/schema.dart';
 import 'package:epub_ssr/src/readers/book_cover_reader.dart';
 import 'package:epub_ssr/src/readers/chapter_reader.dart';
-import 'package:image/image.dart';
 import 'chapter.dart';
 import 'content.dart';
 
@@ -18,5 +19,5 @@ class EpubBookRef {
 
   List<EpubChapterRef> get chapters => ChapterReader.getChapters(this);
 
-  Image? readCover() => BookCoverReader.readBookCover(this);
+  Uint8List? readCover() => BookCoverReader.readBookCover(this);
 }

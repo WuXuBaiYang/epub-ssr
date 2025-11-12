@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:archive/archive.dart';
 import 'package:epub_ssr/epub.dart';
 import 'entities/ref/byte_content_file.dart';
@@ -8,6 +10,16 @@ import 'readers/content_reader.dart';
 import 'readers/schema_reader.dart';
 
 class EpubReader {
+  static Future<EpubBookRef> openBookFile(String path) async {
+    final bytes = await File(path).readAsBytes();
+    return EpubReader.openBook(bytes);
+  }
+
+  static Future<EpubBook> readBookFile(String path) async {
+    final bytes = await File(path).readAsBytes();
+    return EpubReader.readBook(bytes);
+  }
+
   /// Opens the book asynchronously without reading its content. Holds the handle to the EPUB file.
   static EpubBookRef openBook(List<int> bytes) {
     final epubArchive = ZipDecoder().decodeBytes(bytes);
